@@ -1,5 +1,8 @@
 # Apphia s.r.l.
 # Backup script for PostgreSQL database using Docker Compose
+#
+# To update this script run
+# curl -fsOL https://raw.githubusercontent.com/Apphia-srl/scripts-backup-and-restore/refs/heads/main/backup/postgresql.sh
 
 #!/bin/bash
 
@@ -29,6 +32,10 @@ SERVICE=${3:-"postgres"}
 if [[ ! $FILENAME == *.sql.gz ]]; then
     FILENAME="${FILENAME}.sql.gz"
 fi
+
+# Create the output directory if it doesn't exist
+OUTPUT_DIR=$(dirname "$FILENAME")
+mkdir -p "$OUTPUT_DIR"
 
 COMMAND="pg_dump -U \$POSTGRES_USER \$POSTGRES_DB --clean --if-exists | gzip"
 
